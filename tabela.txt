@@ -1,0 +1,7 @@
+create table Pessoa(
+codPessoa int IDENTITY(1,1) primary key,
+nome varchar(50) not null,
+telefone varchar(15) not null,
+cep char(8) not null,
+numero int not null,
+complemento varchar(20) null)
