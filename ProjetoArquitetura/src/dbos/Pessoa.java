@@ -49,7 +49,7 @@ public class Pessoa {
 	
 	public void setCep(String cep) throws Exception
 	{
-		if(cep == null || cep.length() > 8 || !ehCep(cep))
+		if(cep == null || !ehCep(cep))
 			throw new Exception("cep inválido!");
 		
 		this.cep = cep;

@@ -8,18 +8,23 @@ import core.*;
 import dbos.*;
 
 public class Pessoas {
+
 	
-	public static void incluir(Cep cep) throws Exception
+	public static void incluir(Pessoa pessoa) throws Exception
 	{
-		if(cep == null)
-			throw new Exception("Cep não fornecidos");
+		if(pessoa == null)
+			throw new Exception("pessoa não fornecida");
 		
 		try 
 		{
 			String sql;
-			sql = "insert into Cep values(?)";
+			sql = "insert into Pessoa values(?, ?, ?, ?, ?)";
 			BDSQLServer.COMANDO.prepareStatement(sql);
-			BDSQLServer.COMANDO.setString(1, cep.getCep());
+			BDSQLServer.COMANDO.setString(1, pessoa.getNome());
+			BDSQLServer.COMANDO.setString(2, pessoa.getTelefone());
+			BDSQLServer.COMANDO.setString(3, pessoa.getCep());
+			BDSQLServer.COMANDO.setInt	 (4, pessoa.getNumero());
+			BDSQLServer.COMANDO.setString(5, pessoa.getComplemento());
 			
 			BDSQLServer.COMANDO.executeUpdate();
 			BDSQLServer.COMANDO.commit();
@@ -30,26 +35,30 @@ public class Pessoas {
 		}
 	}
 		
-	public static void alterar(Cep cep)throws Exception
+	public static void alterar(Pessoa pessoa)throws Exception
 	{
-		if(cep == null)
-			throw new Exception("Preencha todos os espaços");
+		if(pessoa == null)
+			throw new Exception("Não há pessoa para alterar");
 		
 		try 
 		{
 			String sql;
-			sql = "update Cep set cep = ? where codCep = ?";
+			sql = "update Pessoa set nome = ?, telefone = ?, cep = ?, numero = ?, complemento = ? where codPessoa = ?";
 
 			BDSQLServer.COMANDO.prepareStatement(sql);
-			BDSQLServer.COMANDO.setString(1, cep.getCep());
-			BDSQLServer.COMANDO.setInt(2, cep.getCodCep());
+			BDSQLServer.COMANDO.setString(1, pessoa.getNome());
+			BDSQLServer.COMANDO.setString(2, pessoa.getTelefone());
+			BDSQLServer.COMANDO.setString(3, pessoa.getCep());
+			BDSQLServer.COMANDO.setInt   (4, pessoa.getNumero());
+			BDSQLServer.COMANDO.setString(5, pessoa.getComplemento());
+			BDSQLServer.COMANDO.setInt	 (6, pessoa.getCodPessoa());
 			
 			BDSQLServer.COMANDO.executeUpdate();
 			BDSQLServer.COMANDO.commit();
 		}
 		catch(Exception ex) 
 		{
-			throw new Exception("Erro ao alterar o cep");
+			throw new Exception("Erro ao alterar a pessoa");
 		}
 	}
 	
@@ -75,27 +84,29 @@ public class Pessoas {
 		return cep;
 	}
 	
-	public static List<Cep> selecionarCeps() throws Exception
+	public static List<Pessoa> selecionarPessoas() throws Exception
 	{
-		List<Cep> ret = new ArrayList<Cep>();
-		Cep cep;
+		List<Pessoa> ret = new ArrayList<Pessoa>();
+		Pessoa pessoa;
 		
 		try 
 		{
-			String sql = "select * from Cep";
+			String sql = "select * from Pessoa";
 			BDSQLServer.COMANDO.prepareStatement(sql);
 			
 			MeuResultSet resultado = (MeuResultSet) BDSQLServer.COMANDO.executeQuery();
 			while(resultado.next()) 
 			{
-				cep = new Cep(resultado.getInt("codCep"), resultado.getString("cep"));
+				pessoa = new Pessoa(resultado.getInt("codPessoa"), resultado.getString("nome"), 
+									resultado.getString("telefone"), resultado.getString("cep"),
+									resultado.getInt("numero"),	resultado.getString("complemento"));
 	
-				ret.add(cep);
+				ret.add(pessoa);
 			}
 		}
 		catch(Exception ex)
 		{
-			throw new Exception("Erro ao procurar Ceps");
+			throw new Exception("Erro ao procurar Pessoas");
 		}
 		
 		return ret;
@@ -108,7 +119,7 @@ public class Pessoas {
 		
 		try
 		{
-			String sql = "delete from Cep where codCep = ?";
+			String sql = "delete from Pessoa where codPessoa = ?";
 			BDSQLServer.COMANDO.prepareStatement(sql);
 			BDSQLServer.COMANDO.setInt(1, codigo);
 			
@@ -117,7 +128,7 @@ public class Pessoas {
 		}
 		catch(Exception a)
 		{
-			throw new Exception("Erro ao excluir cep");
+			throw new Exception("Erro ao excluir pessoa");
 		}
 		
 	}
