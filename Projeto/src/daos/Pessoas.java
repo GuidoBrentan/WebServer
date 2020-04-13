@@ -62,12 +62,12 @@ public class Pessoas {
 		}
 	}
 	
-	public static Cep getCep(int codigo) throws Exception 
+	public static Pessoa getPessoa(int codigo) throws Exception 
 	{
-		Cep cep = null;
+		Pessoa pessoa = null;
 		try 
 		{
-			String sql = "select * from Cep where codCep = ?";
+			String sql = "select * from Pessoa where codPessoa = ?";
 			BDSQLServer.COMANDO.prepareStatement(sql);
 			BDSQLServer.COMANDO.setInt(1, codigo);
 			MeuResultSet resultado = (MeuResultSet) BDSQLServer.COMANDO.executeQuery();
@@ -75,16 +75,17 @@ public class Pessoas {
 			if(!resultado.first())
 				throw new Exception("Nao cadastrado");
 			
-			cep = new Cep(resultado.getInt("codCep"), resultado.getString("cep"));
+			pessoa = new Pessoa(resultado.getInt("codPessoa"), resultado.getString("nome"), resultado.getString("telefone"), 
+								resultado.getString("cep"), resultado.getInt("numero"), resultado.getString("complemento"));
 		}
 		catch(Exception ex) 
 		{
-			throw new Exception("Erro ao procurar cep");
+			throw new Exception("Erro ao procurar pessoa");
 		}
-		return cep;
+		return pessoa;
 	}
 	
-	public static List<Pessoa> selecionarPessoas() throws Exception
+	public static List<Pessoa> getPessoas() throws Exception
 	{
 		List<Pessoa> ret = new ArrayList<Pessoa>();
 		Pessoa pessoa;

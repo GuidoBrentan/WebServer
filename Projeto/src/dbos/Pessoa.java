@@ -65,8 +65,11 @@ public class Pessoa {
 	
 	public void setComplemento(String complemento) throws Exception
 	{
-		if(complemento == null || complemento.length() > 20)
-			throw new Exception("complemento inválido!");
+		if(complemento != null)
+			if(complemento.length() > 20)
+				throw new Exception("complemento inválido!");
+		
+		this.complemento = complemento;
 	}
 	
 	public int getCodPessoa()
