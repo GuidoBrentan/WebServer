@@ -114,6 +114,20 @@ public class Pessoa {
 		return true;
 	}
 	
+	private boolean ehTelefone(String telefone)
+	{	
+		for(byte i = 0; i < telefone.length(); i++)
+		{
+			if(telefone.charAt(i) != '(' || 
+			   telefone.charAt(i) != ')' ||
+			   telefone.charAt(i) != '-' || 
+			   !Character.isDigit(telefone.charAt(i)))
+				return false;
+		}
+		
+		return true;
+	}
+	
 	public String toString()
 	{
 		String ret;
