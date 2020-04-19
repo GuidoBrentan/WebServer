@@ -26,7 +26,7 @@ public class Pessoa {
 	public void setCodPessoa(int codPessoa) throws Exception
 	{
 		if(codPessoa <= 0)
-			throw new Exception("codPessoa inválido!");
+			throw new Exception("codPessoa invï¿½lido!");
 		
 		this.codPessoa = codPessoa;
 	}
@@ -34,7 +34,7 @@ public class Pessoa {
 	public void setNome(String nome) throws Exception
 	{
 		if(nome == null || nome.length() > 50)
-			throw new Exception("nome inválido!");
+			throw new Exception("nome invï¿½lido!");
 		
 		this.nome = nome;
 	}
@@ -42,7 +42,7 @@ public class Pessoa {
 	public void setTelefone(String telefone) throws Exception
 	{
 		if(telefone == null || telefone.length() > 15)
-			throw new Exception("telefone inválido!");
+			throw new Exception("telefone invï¿½lido!");
 		
 		this.telefone = telefone;
 	}
@@ -50,7 +50,7 @@ public class Pessoa {
 	public void setCep(String cep) throws Exception
 	{
 		if(cep == null || !ehCep(cep))
-			throw new Exception("cep inválido!");
+			throw new Exception("cep invï¿½lido!");
 		
 		this.cep = cep;
 	}
@@ -58,7 +58,7 @@ public class Pessoa {
 	public void setNumero(int numero) throws Exception
 	{
 		if(numero <= 0)
-			throw new Exception("numero inválido!");
+			throw new Exception("numero invï¿½lido!");
 		
 		this.numero = numero;
 	}
@@ -67,7 +67,7 @@ public class Pessoa {
 	{
 		if(complemento != null)
 			if(complemento.length() > 20)
-				throw new Exception("complemento inválido!");
+				throw new Exception("complemento invï¿½lido!");
 		
 		this.complemento = complemento;
 	}
@@ -110,20 +110,6 @@ public class Pessoa {
 		for(byte i = 0; i < 7; i++)
 			if(!Character.isDigit(cep.charAt(i)))
 				return false;
-		
-		return true;
-	}
-	
-	private boolean ehTelefone(String telefone)
-	{	
-		for(byte i = 0; i < telefone.length(); i++)
-		{
-			if(telefone.charAt(i) != '(' || 
-			   telefone.charAt(i) != ')' ||
-			   telefone.charAt(i) != '-' || 
-			   !Character.isDigit(telefone.charAt(i)))
-				return false;
-		}
 		
 		return true;
 	}
