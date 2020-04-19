@@ -1,10 +1,15 @@
 package janelas;
 
-import java.awt.BorderLayout;
-import java.awt.GridLayout;
-import java.awt.EventQueue;
+import java.awt.event.*;
+import java.awt.*;
 
 import javax.swing.*;
+
+
+import daos.*;
+import dbos.*;
+import webServer.*;
+
 
 public class JanelaPrin extends JFrame { 
 	private JPanel[] panelField = new JPanel[9];
@@ -28,6 +33,43 @@ public class JanelaPrin extends JFrame {
 				}
 			}
 		});
+	}
+
+
+	public boolean validaPessoa(){
+		if(!field[0].getText().matches("[A-Za-z]{0,50}")){
+			return false;
+		}
+		if(achaPessoa(field[0].getText()) < 0){
+			return false;
+		}
+		if(!field[1].getText().matches("^(\\([0-9]{2}\\) )?[0-9]{4,5}-?[0-9]{4}")){
+			return false;
+		}
+		if(!field[2].getText().matches("[0-9]{8}")){
+			return false;
+		}
+		if(!field[3].getText().matches("[0-9]{1,}")){
+			return false;
+		}
+		return true;
+	}
+	
+	public int achaPessoa(String pessoa){
+		try{
+			for(Pessoa p : Pessoas.getPessoas()){
+				if(p.getNome.equals(pessoa)){
+					return p.getCodPessoa();
+				}
+			}
+			
+		}
+		catch(Exception e){}
+		return -1;
+	}
+
+	public Pessoa criarPessoa(){
+		return new Pessoa(field[0].getText(), field[1].getText(), field[2].getText(), Integer.parseInt(field[3].getText()), field[4].getText());
 	}
 
 
@@ -63,6 +105,64 @@ public class JanelaPrin extends JFrame {
 
                         this.add(panelButton[i]);
                 }
+
+		button[0].addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				if(validaPessoa()){
+					try{
+						Pessoas.incluir(criarPessoa());
+						JOptionPane.showMessageDialog(null, "Pessoa incluida!");
+					}
+					catch(Exception err){}
+				}
+				else{
+					JOptionPane.showMessageDialog(null, "Preencha corretamente!");
+				}
+			}
+		});
+		button[1].addActionListener(new ActionListener(){
+                        public void actionPerformed(ActionEvent e){
+				try{
+                                	Pessoas.excluir(achaPessoa(field[0].getText()));
+                        		JOptionPane.showMessageDialog(null, "Pessoa excluida!");
+				}
+				catch(Exception err){
+					JOptionPane.showMessageDialog(null, "Pessoa não registrada!");
+				}
+			}
+                });
+		button[2].addActionListener(new ActionListener(){
+                        public void actionPerformed(ActionEvent e){
+                                if(achaPessoa(field[0].getText()) > 0){
+					Pessoa p = Pessoas.getPessoa(achaPessoa(field[0].getText()));
+					field[1].setText(p.getTelefone());
+					field[2].setText(p.getCep());
+					field[3].setText(p.getNumero());
+					field[4].setText(p.getComplemento());
+
+					Logradouro l = (Logradouro)ClienteWS.getObjeto(Logradouro.class, "http://api.postmon.com.br/v1/cep", field[2].getText());
+					
+					field[5].setText(l.getLogradouro());
+					field[6].setText(l.getBairro());
+					field[7].setText(l.getCidade());
+					field[8].setText(l.getEstado());
+				}
+                        }
+                });
+		button[3].addActionListener(new ActionListener(){
+                        public void actionPerformed(ActionEvent e){
+                               if(validaPessoa()){
+                                        try{
+                                                Pessoas.incluir(criarPessoa());
+                                                JOptionPane.showMessageDialog(null, "Pessoa alterada!");
+                                        }
+                                        catch(Exception err){}
+                                }
+                                else{
+                                        JOptionPane.showMessageDialog(null, "Preencha corretamente!");
+                                } 
+                        }
+                });
 
 
 		this.pack();
